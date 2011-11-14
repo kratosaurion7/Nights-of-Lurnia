@@ -26,11 +26,14 @@ namespace The_Nights_Of_Lurnia.Map
 
         private int[,] tileValues; // Texture values of each tile
 
-        private Tile[,] zoneTiles;
+        private Tile[,] zoneTiles; // Array of instanced tiles
 
         // Tile values
         private int tileWidth; // Width & Height in pixels of each tiles.
         private int tileHeight;
+
+        // DEBUG Stuff
+        Random randomMaker = new Random();
 
         public Zone(Game game, int width, int height)
             : base(game)
@@ -52,7 +55,8 @@ namespace The_Nights_Of_Lurnia.Map
 
 
             // Create Zone
-            CreateGrid();
+            CreateTestGrid();
+            fillRandomValues();
 
             base.Initialize();
         }
@@ -72,7 +76,24 @@ namespace The_Nights_Of_Lurnia.Map
                      * stamp of the game and it is updated asyncronously the problem
                      * will not happen.
                      */
-                    zoneTiles[j,i].Draw(gameTime);
+                    switch (tileValues[j,i])
+                    {
+                        case 0:
+                            zoneTiles[j, i].Draw(gameTime, new Rectangle(0,0,32,32));
+                            break;
+                        case 1:
+                            zoneTiles[j, i].Draw(gameTime, new Rectangle(32, 0, 32, 32));
+                            break;
+                        case 2:
+                            zoneTiles[j, i].Draw(gameTime, new Rectangle(64, 0, 32, 32));
+                            break;
+                        case 3:
+                            zoneTiles[j, i].Draw(gameTime, new Rectangle(96, 0, 32, 32));
+                            break;
+                        case 4:
+                            zoneTiles[j, i].Draw(gameTime, new Rectangle(128, 0, 32, 32));
+                            break;
+                    }
                 }
             }
             base.Draw(gameTime);
@@ -105,7 +126,7 @@ namespace The_Nights_Of_Lurnia.Map
             base.Update(gameTime);
         }
 
-        private void CreateGrid()
+        private void CreateTestGrid()
         {
             // Array dimensions
             tileValues = new int[zoneWidth, zoneHeight];
@@ -123,10 +144,22 @@ namespace The_Nights_Of_Lurnia.Map
                     Tile newTile = new Tile(Game, this, new Vector2(j * tileWidth, i * tileHeight));
 
                     // Associate tile with sprite
-                    newTile.LoadContent(Game.Content, "Grass");
+                    newTile.LoadContent(Game.Content, "simple");
                     newTile.Initialize(); // Have to babysit again
                     // Place the tile in the array
                     zoneTiles[j, i] = newTile;
+                }
+            }
+        }
+
+        private void fillRandomValues()
+        {
+            for (int i = 0; i < zoneHeight; i++)
+            {// Doing for each row : 
+                for (int j = 0; j < zoneWidth; j++)
+                {// Doing for each column : 
+                    tileValues[j, i] = randomMaker.Next(0, 4);
+
                 }
             }
 

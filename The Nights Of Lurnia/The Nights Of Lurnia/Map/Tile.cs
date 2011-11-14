@@ -68,14 +68,12 @@ namespace The_Nights_Of_Lurnia.Map
             
         }
 
-        public override void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime, Rectangle sourceRectangle)
         {
-            spriteBatch.Draw(backgroundTexture,tileBounds,Color.White);
+            //spriteBatch.Draw(backgroundTexture,tileBounds,Color.White);
+            spriteBatch.Draw(backgroundTexture, tileBounds, sourceRectangle, Color.White);
             base.Draw(gameTime);
         }
-
-
-
 
     }
 }
