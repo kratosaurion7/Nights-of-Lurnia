@@ -33,7 +33,7 @@ namespace The_Nights_Of_Lurnia.Map
         private int tileHeight;
 
         // DEBUG Stuff
-        Random randomMaker = new Random();
+        static Random randomMaker = new Random();
 
         public Zone(Game game, int width, int height)
             : base(game)
@@ -55,7 +55,7 @@ namespace The_Nights_Of_Lurnia.Map
 
 
             // Create Zone
-            CreateTestGrid();
+            CreateTiles();
             fillRandomValues();
 
             base.Initialize();
@@ -126,7 +126,7 @@ namespace The_Nights_Of_Lurnia.Map
             base.Update(gameTime);
         }
 
-        private void CreateTestGrid()
+        private void CreateTiles()
         {
             // Array dimensions
             tileValues = new int[zoneWidth, zoneHeight];
@@ -163,6 +163,11 @@ namespace The_Nights_Of_Lurnia.Map
                 }
             }
 
+        }
+
+        public void ReCreateMap()
+        {
+            fillRandomValues();
         }
     }
 }

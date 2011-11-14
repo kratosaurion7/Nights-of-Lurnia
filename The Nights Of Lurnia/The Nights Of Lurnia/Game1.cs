@@ -24,6 +24,10 @@ namespace The_Nights_Of_Lurnia
         // Zone
         private Map.Zone gameZone;
 
+        // Keyboard states
+        KeyboardState previousKeyboardState;
+        KeyboardState currentKeyboardState;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -80,18 +84,22 @@ namespace The_Nights_Of_Lurnia
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
+            currentKeyboardState = Keyboard.GetState();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (currentKeyboardState.IsKeyDown(Keys.Escape))
             {
                 this.Exit();
             }
+            if (currentKeyboardState.IsKeyDown(Keys.Enter) && previousKeyboardState.IsKeyDown(Keys.Enter) == false)
+            {
+                gameZone.ReCreateMap();
+            }
 
-            // TODO: Add your update logic here
+            previousKeyboardState = currentKeyboardState;
 
             base.Update(gameTime);
+
+            
         }
 
         /// <summary>
