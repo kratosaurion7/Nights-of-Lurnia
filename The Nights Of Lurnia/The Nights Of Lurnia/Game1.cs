@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using The_Nights_Of_Lurnia.Map;
 
 namespace The_Nights_Of_Lurnia
 {
@@ -16,13 +17,19 @@ namespace The_Nights_Of_Lurnia
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        // Managers & Services
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        // Zone
+        private Map.Zone gameZone;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            graphics.PreferredBackBufferHeight = 512;
+            graphics.PreferredBackBufferWidth = 512;
         }
 
         /// <summary>
@@ -33,7 +40,14 @@ namespace The_Nights_Of_Lurnia
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            // Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            // Publish the service, allowing everything to use the spriteBatch
+            Services.AddService(typeof(SpriteBatch), spriteBatch);
+
+            // Zone init
+            gameZone = new Zone(this,16,16);
+            Components.Add(gameZone);
 
             base.Initialize();
         }
@@ -45,8 +59,8 @@ namespace The_Nights_Of_Lurnia
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            
+            
             // TODO: use this.Content to load your game content here
         }
 
@@ -70,6 +84,11 @@ namespace The_Nights_Of_Lurnia
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                this.Exit();
+            }
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -82,10 +101,13 @@ namespace The_Nights_Of_Lurnia
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
 
             base.Draw(gameTime);
+
+            spriteBatch.End();
+
+
         }
     }
 }
