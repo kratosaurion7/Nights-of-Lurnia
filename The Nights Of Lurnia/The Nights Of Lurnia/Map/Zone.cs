@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using The_Nights_Of_Lurnia.CameraService;
 
 namespace The_Nights_Of_Lurnia.Map
 {
@@ -30,6 +31,9 @@ namespace The_Nights_Of_Lurnia.Map
         // Tile values
         private int tileWidth; // Width & Height in pixels of each tiles.
         private int tileHeight;
+
+        // Camera
+        private Camera gameCam;
 
 
         // DEBUG Stuff

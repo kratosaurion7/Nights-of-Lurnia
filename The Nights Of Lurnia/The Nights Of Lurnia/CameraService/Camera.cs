@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using The_Nights_Of_Lurnia.Map;
+﻿using Microsoft.Xna.Framework;
 
-namespace The_Nights_Of_Lurnia.Camera
+namespace The_Nights_Of_Lurnia.CameraService
 {
     public class Camera
     {

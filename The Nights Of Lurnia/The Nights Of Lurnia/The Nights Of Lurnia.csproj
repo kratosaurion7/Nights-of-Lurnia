@@ -107,7 +107,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Camera\Camera.cs" />
+    <Compile Include="CameraService\Camera.cs" />
     <Compile Include="Character\Player.cs" />
     <Compile Include="Map\Tile.cs" />
     <Compile Include="Map\Zone.cs" />
