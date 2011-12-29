@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-
 namespace The_Nights_Of_Lurnia.Map
 {
     /// <summary>
@@ -32,6 +31,7 @@ namespace The_Nights_Of_Lurnia.Map
         private int tileWidth; // Width & Height in pixels of each tiles.
         private int tileHeight;
 
+
         // DEBUG Stuff
         static Random randomMaker = new Random();
 
@@ -41,7 +41,6 @@ namespace The_Nights_Of_Lurnia.Map
             // Zone Values
             zoneWidth = width;
             zoneHeight = height;
-
         }
 
         /// <summary>
@@ -56,7 +55,7 @@ namespace The_Nights_Of_Lurnia.Map
 
             // Create Zone
             CreateTiles();
-            fillRandomValues();
+            FillRandomValues();
 
             base.Initialize();
         }
@@ -152,7 +151,7 @@ namespace The_Nights_Of_Lurnia.Map
             }
         }
 
-        private void fillRandomValues()
+        private void FillRandomValues()
         {
             for (int i = 0; i < zoneHeight; i++)
             {// Doing for each row : 
@@ -167,7 +166,7 @@ namespace The_Nights_Of_Lurnia.Map
 
         public void ReCreateMap()
         {
-            fillRandomValues();
+            FillRandomValues();
         }
     }
 }
