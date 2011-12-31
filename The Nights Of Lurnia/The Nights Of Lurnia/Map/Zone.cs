@@ -32,6 +32,30 @@ namespace The_Nights_Of_Lurnia.Map
         private int tileWidth; // Width & Height in pixels of each tiles.
         private int tileHeight;
 
+        public int ZoneWidth
+        {
+            get { return zoneWidth; }
+            set { zoneWidth = value; }
+        }
+
+        public int ZoneHeight
+        {
+            get { return zoneHeight; }
+            set { zoneHeight = value; }
+        }
+
+        public int TileWidth
+        {
+            get { return tileWidth; }
+            set { tileWidth = value; }
+        }
+
+        public int TileHeight
+        {
+            get { return tileHeight; }
+            set { tileHeight = value; }
+        }
+
         // Camera
         private Camera gameCam;
 
@@ -43,9 +67,10 @@ namespace The_Nights_Of_Lurnia.Map
             : base(game)
         {
             // Zone Values
-            zoneWidth = width;
-            zoneHeight = height;
+            ZoneWidth = width;
+            ZoneHeight = height;
         }
+
 
         /// <summary>
         /// Allows the game component to perform any initialization it needs to before starting
@@ -55,7 +80,7 @@ namespace The_Nights_Of_Lurnia.Map
         {
             // Query services
             spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
-
+            gameCam = (Camera) Game.Services.GetService(typeof (Camera));
 
             // Create Zone
             CreateTiles();
@@ -66,9 +91,9 @@ namespace The_Nights_Of_Lurnia.Map
 
         public override void Draw(GameTime gameTime)
         {
-            for (int i = 0; i < zoneWidth; i++)
+            for (int i = (int)gameCam.CameraPosition.Y; i < gameCam.CameraPosition.Y + gameCam.CameraHeight; i++)
             {// Doing for each row : 
-                for (int j = 0; j < zoneHeight; j++)
+                for (int j = (int)gameCam.CameraPosition.X; j < gameCam.CameraPosition.X + gameCam.CameraWidth; j++)
                 {// Doing for each column : 
                     /* A problem could arise here. The draw from the tile uses
                      * gameTime, the gameTime stamp from this procedure. If the 
@@ -79,22 +104,24 @@ namespace The_Nights_Of_Lurnia.Map
                      * stamp of the game and it is updated asyncronously the problem
                      * will not happen.
                      */
+                    Vector2 tileNextPosition = new Vector2(j * tileWidth, i * tileHeight);
+
                     switch (tileValues[j,i])
                     {
                         case 0:
-                            zoneTiles[j, i].Draw(gameTime, new Rectangle(0,0,32,32));
+                            zoneTiles[j, i].Draw(gameTime, new Rectangle(0,0,32,32), tileNextPosition);
                             break;
                         case 1:
-                            zoneTiles[j, i].Draw(gameTime, new Rectangle(32, 0, 32, 32));
+                            zoneTiles[j, i].Draw(gameTime, new Rectangle(32, 0, 32, 32), tileNextPosition);
                             break;
                         case 2:
-                            zoneTiles[j, i].Draw(gameTime, new Rectangle(64, 0, 32, 32));
+                            zoneTiles[j, i].Draw(gameTime, new Rectangle(64, 0, 32, 32), tileNextPosition);
                             break;
                         case 3:
-                            zoneTiles[j, i].Draw(gameTime, new Rectangle(96, 0, 32, 32));
+                            zoneTiles[j, i].Draw(gameTime, new Rectangle(96, 0, 32, 32), tileNextPosition);
                             break;
                         case 4:
-                            zoneTiles[j, i].Draw(gameTime, new Rectangle(128, 0, 32, 32));
+                            zoneTiles[j, i].Draw(gameTime, new Rectangle(128, 0, 32, 32), tileNextPosition);
                             break;
                     }
                 }
@@ -113,9 +140,9 @@ namespace The_Nights_Of_Lurnia.Map
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            for (int i = 0; i < zoneWidth; i++)
+            for (int i = 0; i < ZoneWidth; i++)
             {// Doing for each row : 
-                for (int j = 0; j < zoneHeight; j++)
+                for (int j = 0; j < ZoneHeight; j++)
                 {// Doing for each column : 
                     /* Same problem as the above Draw() function.
                      * Mistiming due to the possibly byvalue nature of 
@@ -132,19 +159,19 @@ namespace The_Nights_Of_Lurnia.Map
         private void CreateTiles()
         {
             // Array dimensions
-            tileValues = new int[zoneWidth, zoneHeight];
-            zoneTiles = new Tile[zoneWidth, zoneHeight];
+            tileValues = new int[ZoneWidth, ZoneHeight];
+            zoneTiles = new Tile[ZoneWidth, ZoneHeight];
 
             // Give the tiles a Width & Height. Temporary value at 32
-            tileWidth = 32;
-            tileHeight = 32;
+            TileWidth = 32;
+            TileHeight = 32;
 
-            for (int i = 0; i < zoneHeight; i++)
+            for (int i = 0; i < ZoneHeight; i++)
             {// Doing for each row : 
-                for (int j = 0; j < zoneWidth; j++)
+                for (int j = 0; j < ZoneWidth; j++)
                 {// Doing for each column : 
                     // Create tile
-                    Tile newTile = new Tile(Game, this, new Vector2(j * tileWidth, i * tileHeight));
+                    Tile newTile = new Tile(Game, this, new Vector2(j * TileWidth, i * TileHeight));
 
                     // Associate tile with sprite
                     newTile.LoadContent(Game.Content, "simple");
@@ -157,9 +184,9 @@ namespace The_Nights_Of_Lurnia.Map
 
         private void FillRandomValues()
         {
-            for (int i = 0; i < zoneHeight; i++)
+            for (int i = 0; i < ZoneHeight; i++)
             {// Doing for each row : 
-                for (int j = 0; j < zoneWidth; j++)
+                for (int j = 0; j < ZoneWidth; j++)
                 {// Doing for each column : 
                     tileValues[j, i] = randomMaker.Next(0, 4);
 
@@ -171,6 +198,7 @@ namespace The_Nights_Of_Lurnia.Map
         public void ReCreateMap()
         {
             FillRandomValues();
+            
         }
     }
 }

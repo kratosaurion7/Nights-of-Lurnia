@@ -44,7 +44,7 @@ namespace The_Nights_Of_Lurnia.Map
         {
             // TODO: Add your initialization code here
             spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
-            
+
             base.Initialize();
 
         }
@@ -65,14 +65,15 @@ namespace The_Nights_Of_Lurnia.Map
             backgroundTexture = theContentManager.Load<Texture2D>(theAssetName);
             tileBounds = new Rectangle((int)location.X,(int)location.Y,
                 backgroundTexture.Width,backgroundTexture.Height);
-            
+
         }
 
-        public void Draw(GameTime gameTime, Rectangle sourceRectangle)
+        public void Draw(GameTime gameTime, Rectangle sourceRectangle, Vector2 drawPosition)
         {
             //spriteBatch.Draw(backgroundTexture,tileBounds,Color.White);
-            spriteBatch.Draw(backgroundTexture, tileBounds, sourceRectangle, Color.White);
+            spriteBatch.Draw(backgroundTexture, drawPosition, sourceRectangle, Color.White);
             base.Draw(gameTime);
+
         }
 
     }

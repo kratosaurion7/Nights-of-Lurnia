@@ -10,7 +10,7 @@ namespace The_Nights_Of_Lurnia
         /// </summary>
         static void Main(string[] args)
         {
-            using (Game1 game = new Game1())
+            using (LurniaGame game = new LurniaGame())
             {
                 game.Run();
             }
