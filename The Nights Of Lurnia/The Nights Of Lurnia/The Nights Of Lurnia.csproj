@@ -114,6 +114,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="LurniaGame.cs" />
+    <Compile Include="Spritesheet.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

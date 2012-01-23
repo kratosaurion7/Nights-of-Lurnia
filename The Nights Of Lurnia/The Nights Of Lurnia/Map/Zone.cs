@@ -21,12 +21,14 @@ namespace The_Nights_Of_Lurnia.Map
         private SpriteBatch spriteBatch;
 
         // Zone properties
-        private int zoneWidth; // Width & Height in absolute units. NOT by pixel
+        private int zoneWidth; // Width & Height in tile units. NOT by pixel
         private int zoneHeight;
 
         private int[,] tileValues; // Texture values of each tile
 
         private Tile[,] zoneTiles; // Array of instanced tiles
+
+        private Spritesheet simpleSpritesheet; 
 
         // Tile values
         private int tileWidth; // Width & Height in pixels of each tiles.
@@ -56,10 +58,6 @@ namespace The_Nights_Of_Lurnia.Map
             set { tileHeight = value; }
         }
 
-        // Camera
-        private Camera gameCam;
-
-
         // DEBUG Stuff
         static Random randomMaker = new Random();
 
@@ -80,7 +78,7 @@ namespace The_Nights_Of_Lurnia.Map
         {
             // Query services
             spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
-            gameCam = (Camera) Game.Services.GetService(typeof (Camera));
+            simpleSpritesheet = (Spritesheet) Game.Services.GetService(typeof (Spritesheet));
 
             // Create Zone
             CreateTiles();
@@ -91,41 +89,46 @@ namespace The_Nights_Of_Lurnia.Map
 
         public override void Draw(GameTime gameTime)
         {
-            for (int i = (int)gameCam.CameraPosition.Y; i < gameCam.CameraPosition.Y + gameCam.CameraHeight; i++)
-            {// Doing for each row : 
-                for (int j = (int)gameCam.CameraPosition.X; j < gameCam.CameraPosition.X + gameCam.CameraWidth; j++)
-                {// Doing for each column : 
-                    /* A problem could arise here. The draw from the tile uses
-                     * gameTime, the gameTime stamp from this procedure. If the 
-                     * treatement in this Draw function is big/huge the gameTime
-                     * stamp is going to be the same for every calls inside this procedure
-                     * only going to change at the next Draw() of Zone. Mistiming
-                     * may happen. Of course if gameTime is a reference to the 
-                     * stamp of the game and it is updated asyncronously the problem
-                     * will not happen.
-                     */
-                    Vector2 tileNextPosition = new Vector2(j * tileWidth, i * tileHeight);
+            // Position in Tiles(because of the x / 32) of the first Tile in the upper left corner. 
+            int TileSize = tileHeight;
+            Vector2 firstTilePosition = new Vector2(Camera.Position.X / TileSize, Camera.Position.Y / TileSize);
 
-                    switch (tileValues[j,i])
-                    {
-                        case 0:
-                            zoneTiles[j, i].Draw(gameTime, new Rectangle(0,0,32,32), tileNextPosition);
-                            break;
-                        case 1:
-                            zoneTiles[j, i].Draw(gameTime, new Rectangle(32, 0, 32, 32), tileNextPosition);
-                            break;
-                        case 2:
-                            zoneTiles[j, i].Draw(gameTime, new Rectangle(64, 0, 32, 32), tileNextPosition);
-                            break;
-                        case 3:
-                            zoneTiles[j, i].Draw(gameTime, new Rectangle(96, 0, 32, 32), tileNextPosition);
-                            break;
-                        case 4:
-                            zoneTiles[j, i].Draw(gameTime, new Rectangle(128, 0, 32, 32), tileNextPosition);
-                            break;
-                    }
+            // Offset is used to draw only portions of a tile.
+            Vector2 squareOffset = new Vector2(Camera.Position.X % TileSize, Camera.Position.Y % TileSize);
+
+            for (int y = 0; y < zoneHeight; y++)
+            {
+                for (int x = 0; x < zoneWidth; x++)
+                {
+                    Rectangle tileNextPosition = new Rectangle((x*tileWidth) - (int)squareOffset.X,
+                                                               (y*tileHeight) - (int)squareOffset.Y,
+                                                               tileHeight,
+                                                               tileWidth);
+
+                        switch (tileValues[x + (int)firstTilePosition.X, y + (int)firstTilePosition.Y])
+                        {
+                            case 0:
+                                zoneTiles[x, y].Draw(gameTime, new Rectangle(0, 0, tileHeight, tileWidth), tileNextPosition);
+                                break;
+                            case 1:
+                                zoneTiles[x, y].Draw(gameTime, new Rectangle(32, 0, tileHeight, tileWidth), tileNextPosition);
+                                break;
+                            case 2:
+                                zoneTiles[x, y].Draw(gameTime, new Rectangle(64, 0, tileHeight, tileWidth), tileNextPosition);
+                                break;
+                            case 3:
+                                zoneTiles[x, y].Draw(gameTime, new Rectangle(96, 0, tileHeight, tileWidth), tileNextPosition);
+                                break;
+                            case 4:
+                                zoneTiles[x, y].Draw(gameTime, new Rectangle(128, 0, tileHeight, tileWidth), tileNextPosition);
+                                break;
+                        }
+
+
                 }
             }
+
+
             base.Draw(gameTime);
         }
 

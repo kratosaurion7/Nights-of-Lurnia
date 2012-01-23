@@ -27,6 +27,8 @@ namespace The_Nights_Of_Lurnia.Map
 
         private Rectangle tileBounds;
 
+        private static Dictionary<int,Rectangle> spriteSheetIndex = new Dictionary<int, Rectangle>();
+
         public Tile(Game game, Zone ParentZone, Vector2 tileLocation)
             : base(game)
         {
@@ -45,8 +47,13 @@ namespace The_Nights_Of_Lurnia.Map
             // TODO: Add your initialization code here
             spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
 
-            base.Initialize();
+            // Initlialize the index at the first tile init
+            if (spriteSheetIndex == null)
+            {
+                spriteSheetIndex = (Dictionary<int, Rectangle>)Game.Services.GetService(typeof(Dictionary<int, Rectangle>)); 
+            }
 
+            base.Initialize();
         }
 
         /// <summary>
@@ -68,10 +75,12 @@ namespace The_Nights_Of_Lurnia.Map
 
         }
 
-        public void Draw(GameTime gameTime, Rectangle sourceRectangle, Vector2 drawPosition)
+        public void Draw(GameTime gameTime, Rectangle sourceRectangle, Rectangle drawPosition)
         {
-            //spriteBatch.Draw(backgroundTexture,tileBounds,Color.White);
-            spriteBatch.Draw(backgroundTexture, drawPosition, sourceRectangle, Color.White);
+            spriteBatch.Draw(backgroundTexture,
+                drawPosition,
+                sourceRectangle,
+                Color.White);
             base.Draw(gameTime);
 
         }

@@ -8,8 +8,8 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using The_Nights_Of_Lurnia.Map;
 using The_Nights_Of_Lurnia.CameraService;
+using The_Nights_Of_Lurnia.Map;
 
 namespace The_Nights_Of_Lurnia
 {
@@ -25,12 +25,12 @@ namespace The_Nights_Of_Lurnia
         // Zone
         private Map.Zone gameZone;
 
+        // Sprites & spritesheets
+        private Spritesheet SimpleSpritesheet;
+
         // Keyboard states
         KeyboardState previousKeyboardState;
         KeyboardState currentKeyboardState;
-
-        // Camera
-        private Camera gameCam;
 
         public LurniaGame()
         {
@@ -52,16 +52,15 @@ namespace The_Nights_Of_Lurnia
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Zone init
-            gameZone = new Zone(this,32,32);
+            gameZone = new Zone(this,31,31);
             Components.Add(gameZone);
 
-            // Initialize the Camera at the default location.
-            gameCam = new Camera(gameZone, 1, 3, 10, 10);
-            gameCam.MoveSpeed = 1;
+            // Create the first spreadsheet to be used
+            SimpleSpritesheet = new Spritesheet();
 
             // Publish the services to be available to the entire application.
             Services.AddService(typeof(SpriteBatch), spriteBatch);
-            Services.AddService(typeof(Camera), gameCam);
+            Services.AddService(typeof(Spritesheet), SimpleSpritesheet);
 
             base.Initialize();
 
@@ -107,19 +106,19 @@ namespace The_Nights_Of_Lurnia
             }
             if (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyDown(Keys.Left) == false)
             {
-                gameCam.MoveLeft();
+                Camera.MoveLeft();
             }
             if (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyDown(Keys.Right) == false)
             {
-                gameCam.MoveRight();
+                Camera.MoveRight();
             }
             if (currentKeyboardState.IsKeyDown(Keys.Up) && previousKeyboardState.IsKeyDown(Keys.Up) == false)
             {
-                gameCam.MoveUp();
+                Camera.MoveUp();
             }
             if (currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyDown(Keys.Down) == false)
             {
-                gameCam.MoveDown();
+                Camera.MoveDown();
             }
 
 
@@ -127,7 +126,6 @@ namespace The_Nights_Of_Lurnia
 
             base.Update(gameTime);
 
-            
         }
 
         /// <summary>
@@ -143,14 +141,6 @@ namespace The_Nights_Of_Lurnia
 
             spriteBatch.End();
 
-        }
-
-        private void AdjustScreenToFitZone()
-        {
-
-            graphics.PreferredBackBufferHeight = gameCam.CameraHeight * gameZone.TileHeight;
-            graphics.PreferredBackBufferWidth = gameCam.CameraWidth * gameZone.TileWidth;
-            graphics.ApplyChanges();
         }
     }
 }
